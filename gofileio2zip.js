@@ -1,9 +1,11 @@
 // ==UserScript==
 // @name         Gofile.io to Zip
 // @namespace    https://github.com/soukied/gofile.io-to-zip
-// @version      0.1
+// @version      0.2
 // @description  Plugin for a functional 'Create Zip' feature on Gofile.io
 // @author       Adhya Adam Sulthan
+// @updateURL	 https://rawcdn.githack.com/soukied/gofile.io-to-zip/ad08ac8a229b2d9d30fb22ec59e68402ed38f0d6/gofileio2zip.meta.js
+// @downloadURL	 https://rawcdn.githack.com/soukied/gofile.io-to-zip/ad08ac8a229b2d9d30fb22ec59e68402ed38f0d6/gofileio2zip.js
 // @match        https://gofile.io/d/*
 // @icon         https://raw.githubusercontent.com/soukied/gofile.io-to-zip/main/gofileio-icon.png
 // @grant        none
@@ -14,7 +16,7 @@
     loadScript("https://cdnjs.cloudflare.com/ajax/libs/amcharts/3.21.15/plugins/export/libs/FileSaver.js/FileSaver.min.js");
     let downloading = false;
     let loadingCircle = new Image(31, 31);
-    loadingCircle.src = "https://raw.githubusercontent.com/soukied/gofile.io-to-zip/main/loading-circle.gif";
+    loadingCircle.src = "https://files.catbox.moe/071enw.gif";
     loadingCircle.style.display = "none";
     let downloadButton = document.createElement("button");
     downloadButton.className = "btn btn-primary btn-sm";
