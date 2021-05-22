@@ -81,5 +81,4 @@
         document.head.appendChild(el_script);
     }
     window.URLtoArrayBuffer = URLtoArrayBuffer;
-    // Your code here...
 })();
