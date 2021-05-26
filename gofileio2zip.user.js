@@ -19,6 +19,9 @@
     loadingCircle.src = "https://raw.githubusercontent.com/soukied/gofile.io-to-zip/main/loading-circle.gif";
     loadingCircle.style.display = "none";
     let downloadButton = document.createElement("button");
+    let progressLabel = document.createElement("span");
+    progressLabel.style.display = "none";
+    progressLabel.style.marginLeft = progressLabel.style.marginRight = "5px";
     downloadButton.className = "btn btn-primary btn-sm";
     downloadButton.innerText = "Create Zip";
     downloadButton.onclick = () => {
@@ -26,15 +29,17 @@
         downloading = true;
         downloadButton.disabled = true;
         loadingCircle.style.display = "initial";
+        progressLabel.style.display = "initial";
         let urlDatas= []
         for (let s of document.querySelectorAll("#datatable > tbody > tr > td > a.download")) {
             urlDatas.push(s.href);
         }
-        alert("Download is starting....");
         downloadFile(urlDatas).then(()=>{
             downloading = false;
             downloadButton.disabled = false;
             loadingCircle.style.display = "none";
+            progressLabel.style.display = "none";
+            progressLabel.innerText = "";
         });
     }
     let table_el = null;
@@ -52,16 +57,23 @@
     }
     function URLtoArrayBuffer(url) {
         return new Promise((resolve)=>{
-            fetch(url)
-            .then(data=>data.arrayBuffer())
-            .then(data=>resolve(data));
+            let request = new XMLHttpRequest();
+            request.responseType = "arraybuffer";
+            request.onreadystatechange = () => {
+                if (request.readyState == 4 && request.status == 200) resolve(request.response);
+            };
+            request.open("GET", url);
+            request.send('');
         });
     }
     async function downloadFile(urls) {
         let zip = new JSZip();
+        let num = 0;
         for (let url of urls) {
+            progressLabel.innerText = `${num++}/${urls.length} file(s) downloaded`;
             zip.file(getTarget(url), await URLtoArrayBuffer(url), {binary:true});
         }
+        progressLabel.innerText = "Downloading file...";
         zip.generateAsync({type:"blob"})
             .then(function(content) {
             saveAs(content, getTarget(location.pathname) + ".zip");
@@ -73,6 +85,7 @@
         let headRow = zipButtonDownload.parentElement;
         headRow.removeChild(zipButtonDownload);
         headRow.appendChild(downloadButton);
+        headRow.appendChild(progressLabel);
         headRow.appendChild(loadingCircle);
     }
     function loadScript(src) {
